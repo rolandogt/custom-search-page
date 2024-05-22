@@ -1,13 +1,110 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Custom Search</title>
-    <script async src="https://cse.google.com/cse.js?cx=12a99feea48eb4027"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Search Page</title>
+<style>
+    /* Estilos adicionales opcionales */
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+    .tabs {
+        margin-bottom: 10px;
+    }
+    .tab-link {
+        background-color: #f0f0f0;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+    .tab-link.active {
+        background-color: #007bff;
+        color: #fff;
+    }
+    .tab {
+        display: none;
+    }
+    .tab.active {
+        display: block;
+    }
+    .iframe-container {
+        position: relative;
+        margin-bottom: 20px;
+    }
+    .iframe-container iframe {
+        width: 100%;
+        height: 600px;
+        border: none;
+    }
+    .iframe-button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+</style>
 </head>
 <body>
-    <h1>Mi Google Custom Search</h1>
-    <div class="gcse-search"></div>
+
+<div class="tabs">
+    <button class="tab-link" data-tab="iframe">Iframe</button>
+</div>
+
+<div id="iframe" class="tab active">
+    <h1>Iframe</h1>
+    <div class="iframe-container">
+        <iframe id="iframeContent" src="https://rolandogt.github.io/custom-search-page/"></iframe>
+        <button class="iframe-button" onclick="duplicateIframe(this)">x2</button>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab-link');
+    const tabContents = document.querySelectorAll('.tab');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+            setActiveTab(tabId);
+        });
+    });
+
+    function setActiveTab(tabId) {
+        tabContents.forEach(tabContent => {
+            tabContent.classList.remove('active');
+        });
+        tabs.forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.getElementById(tabId).classList.add('active');
+        document.querySelector(`.tab-link[data-tab="${tabId}"]`).classList.add('active');
+    }
+});
+
+function duplicateIframe(button) {
+    const iframeContainer = button.parentElement;
+    const iframeContent = iframeContainer.querySelector('iframe');
+    const newIframe = iframeContent.cloneNode(true);
+
+    // Crear botón para cerrar el iframe duplicado
+    const closeButton = document.createElement('button');
+    closeButton.innerText = 'x';
+    closeButton.className = 'iframe-button';
+    closeButton.onclick = function() {
+        iframeContainer.removeChild(newIframe);
+        iframeContainer.removeChild(closeButton);
+    };
+
+    iframeContainer.appendChild(newIframe);
+    iframeContainer.appendChild(closeButton);
+}
+</script>
+
 </body>
 </html>
